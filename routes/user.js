@@ -7,58 +7,54 @@ const bcrypt = require("bcryptjs");
 
 /* GET users listing. */
 router.get('/sign-up', function(req, res, next) {
-  if (req.user) {
-    console.log(req.user);
-    return res.redirect('/')
-  }
-  res.json("Sign Up")
+  //if (req.user) {
+  //  return res.status(400).json({error: '(sign-up) User already logged in!'})
+  //}
+  res.status(200).json('Signing Up!')
 });
 
 router.post("/sign-up", [
-  body("username", "Username required").trim().isLength({ min: 1, max: 20}).escape(),
-  body("password", "Password required").trim().isLength({ min: 6 }).escape(),
-  body("confirm-password", "Confirm Password required").trim().isLength({ min: 6 }).escape()
-  .custom((value, { req }) => value === req.body.password),
+  body("username", "Username needs 3 letters").trim().isLength({ min: 3, max: 20}).escape()
+  .custom((value) => value !== 'Guest' && value !== 'guest').withMessage('Username cannot be Guest.'),
+  body("password", "Password needs 6 letters").trim().isLength({ min: 6 }).escape(),
+  body("confirmPassword", "Confirm Password needs 6 letters").trim().isLength({ min: 6 }).escape()
+  .custom((value, { req }) => value === req.body.password).withMessage('Confirm Password does not match :('),
   (req, res, next) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) { return res.json({title: 'Sign Up', errors: errors.array()}) }
+    if (!errors.isEmpty()) return res.status(400).json({ error: errors.array() })
     User.findOne({username: req.body.username}).exec((err, user) => {
-      if (err) return next(err)
-      if (user) {
-        return res.json({error: 'Username exists'})
-      } else {
-        bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
-          if (err) { return next(err) }
-          new User({
-            username: req.body.username,
-            password: hashedPassword,
-          }).save(err => {
-            if (err) { return next(err) }
-            res.redirect("/");
-          });
-        });
-      }
+      if (user) return res.status(400).json({ error: 'Username exists' })
+      bcrypt.hash(req.body.password, 10, (err, hashedPassword) => {
+        if (err) { return res.status(400).json({ error: 'Error while saving password' }) }
+        new User({
+          username: req.body.username,
+          password: hashedPassword,
+        }).save(
+          res.status(200).json({ message: 'User is successfully saved :3' })
+        );
+      });
+      
     });
   }
 ]);
 router.get("/log-in", (req, res, next) => {
     if (req.user) {
-      console.log(req.user);
-      return res.redirect('/')
+      return res.status(400).json({error: '(log-in) User already logged in!'})
     }
-    res.json("Log In")
+    res.status(200).json({message: 'logging in!'})
   }
 );
+
 router.post("/log-in",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/user/log-in"
-  })
+  passport.authenticate('local'), 
+  function(req, res) {
+    res.status(200).json({username: req.user.username, userMessages: req.user.user_messages});
+  }
 );
 router.get("/log-out", (req, res, next) => {
   req.logout(function (err) {
-    if (err) { return next(err) }
-    res.redirect("/");
+    if (err) { return res.status(400).json('Error while logging out') }
+    res.status(200).json('Successfully logged out');
   });
 });
 
