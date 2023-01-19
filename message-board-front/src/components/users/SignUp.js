@@ -9,24 +9,20 @@ export default function SignUp({currentUser}) {
     password: '',
     confirmPassword: ''
   })
-  const [errMessage, setErrMessage] = useState()
+  const [errMessageUsername, setErrMessageUsername] = useState(' ')
+  const [errMessagePassword, setErrMessagePassword] = useState(' ')
+  const [errMessageConfirm, setErrMessageConfirm] = useState(' ')
   const navigate = useNavigate();
   useEffect(() => {
     if (currentUser.username !== 'Guest') return navigate('/')
-    async function c() {
-      await fetch('http://localhost:5000/user/sign-up', {credentials: 'include'})
-        .then( async response => {
-        console.log(response)
-        if (!response.ok) { return navigate('/') }
-        await response.json(response)
-        .then(json => console.log(json))
-      })
-    }
-    c()
+    console.log('Signing Up!')
   }, [])
 
   async function handleSubmit(e) { //post
     e.preventDefault();
+    setErrMessageUsername(' ')
+    setErrMessagePassword(' ')
+    setErrMessageConfirm(' ')
     await fetch('http://localhost:5000/user/sign-up', {
       method: 'POST', //all 3 keys necessary
       body: JSON.stringify(data),
@@ -37,11 +33,28 @@ export default function SignUp({currentUser}) {
     }).then( async response => {
       if (!response.ok) {
         setData({...data, password: '', confirmPassword: ''})
-        await response.json(response).then(json => console.log(json))
+        await response.json(response).then(json =>{
+          //console.log(json.error)
+          for (let i = 0; i < json.error.length; i++) {
+            if (!json.error[i].param) {
+              setErrMessageUsername(json.error)
+            } else if (json.error[i].param === 'username') {
+              setErrMessageUsername(json.error[i].msg)
+            } else if (json.error[i].param === 'password') {
+              setErrMessagePassword(json.error[i].msg)
+            } else if (json.error[i].param === 'confirmPassword') {
+              setErrMessageConfirm(json.error[i].msg)
+            }
+          }
+
+        })
         navigate('/user/sign-up')
         return
       }
       setData({username: '', password: '', confirmPassword: ''})
+      setErrMessageUsername(' ')
+      setErrMessagePassword(' ')
+      setErrMessageConfirm(' ')
       navigate('/user/log-in')
       await response.json(response).then(json => console.log(json))
     })
@@ -50,27 +63,31 @@ export default function SignUp({currentUser}) {
   function handleChange(e) {
     setData({...data, [e.target.name]: e.target.value})
   }
+
   return (
     <div className="sign-up-form">
       <form onSubmit={handleSubmit}>
         <div className="sign-up-title">SIGN UP</div>
         <label>
           <div>Username:</div>
-          <input required minlength={3} maxLength={20} type='text' name="username" 
+          <input required minLength={3} maxLength={20} type='text' name="username" 
             className="sign-up-input" value={data.username} onChange={handleChange}>
           </input>
+          <div className="sign-up-err-msg">{errMessageUsername}</div>
         </label>
         <label>
           <div>Password:</div>
-          <input required minlength="6" type='password' name="password" 
+          <input required minLength={6} type='password' name="password" 
             className="sign-up-input" value={data.password} onChange={handleChange}>
           </input>
+          <div className="sign-up-err-msg">{errMessagePassword}</div>
         </label>
         <label>
           <div>Confirm Password:</div>
-          <input required minlength="6" type='password' name="confirmPassword" 
+          <input required minLength={6} type='password' name="confirmPassword" 
             className="sign-up-input" value={data.confirmPassword} onChange={handleChange}>
           </input>
+          <div className="sign-up-err-msg">{errMessageConfirm}</div>
         </label>
         <div className="sign-up-submit"><button type="submit">Submit</button></div>
       </form>

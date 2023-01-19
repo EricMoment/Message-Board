@@ -3,8 +3,9 @@
   min-height: 100vh;
   align-items: center;
   justify-content: center;
-  font-family: 'monaco';
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-size: 2rem;
+  flex: 1;
 }
 
 form {
@@ -16,7 +17,7 @@ form {
 }
 
 .sign-up-submit > button {
-  font-family: 'monaco';
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   height: 60px;
   width: 200px;
   border-radius: 20px;
@@ -40,4 +41,12 @@ label > input {
   font-size: 2rem;
   border-radius: 10px;
   border: 1px solid rgb(80, 134, 0);
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+
+}
+
+.sign-up-err-msg {
+  font-size: 1rem;
+  min-height: 20px;
+  color: red;
 }

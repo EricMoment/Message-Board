@@ -2,9 +2,8 @@
 require('dotenv').config()
 const createError = require('http-errors');
 const express = require('express');
-const path = require('path');
 const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+const morgan = require('morgan');
 
 const session = require("express-session");
 const passport = require("./passport.js");
@@ -26,11 +25,10 @@ const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
 
 app.use(cors({ origin: true, credentials: true }));
-app.use(logger('dev'));
+app.use(morgan('dev'));
 app.use(express.json({ extended: false }));
 app.use(cookieParser());
 app.use(compression());
-app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
@@ -39,6 +37,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/', indexRouter);
 app.use('/user', userRouter);
+
 // catch 404 and forward to error handler
 //You prob dont need it 
 app.use(function(req, res, next) {
