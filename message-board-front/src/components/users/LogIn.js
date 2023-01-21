@@ -15,7 +15,8 @@ export default function LogIn({currentUser, setCurrentUser}) {
   not when your component is first rendered. (According to Chrome Warning)*/
   useEffect(() => {
     if (currentUser.username !== 'Guest') { return navigate('/') }
-    console.log('Logging in!')
+    document.title = 'Log In | Message Board'
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) //dont remove []
 
   async function handleSubmit(e) { //post
@@ -30,24 +31,20 @@ export default function LogIn({currentUser, setCurrentUser}) {
       credentials: 'include'
     }).then(async response => {
       if (!response.ok) {
-        setErrMessage('Username or Password is wrong :(')
+        setErrMessage('Username or Password is wrong.')
         setData({...data, password: ''})
         return navigate('/user/log-in')
+      } else {
+        //success
+        await response.json(response).then(json => {
+          //console.log(json)
+          cookies.set('userid', json.userid, { expires: 7 })
+          cookies.set('username', json.username, { expires: 7 })
+          cookies.set('userMessages', json.userMessages, { expires: 7 })
+          setCurrentUser({userid: json.userid, username: json.username, userMessages: json.userMessages})
+          return navigate('/')
+        })
       }
-      //success
-      setData({username: '', password: ''})
-      
-      await response.json(response).then(json => {
-        console.log(json)
-        cookies.set('userid', json.userid, { expires: 7 })
-        cookies.set('username', json.username, { expires: 7 })
-        cookies.set('userMessages', json.userMessages, { expires: 7 })
-        //localStorage.setItem('username', json.username);
-        //localStorage.setItem('userMessages', json.userMessages)
-        setCurrentUser({userid: json.userid, username: json.username, userMessages: json.userMessages})
-      })
-      setErrMessage(' ')
-      navigate('/')
     })
   }
 

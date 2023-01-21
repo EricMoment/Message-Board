@@ -1,0 +1,66 @@
+.user-page-update-form {
+  position: fixed;
+  top: calc(50% - 252px);
+  left: calc(50% - 300px);
+  height: 504px;
+  min-width: 600px;
+  background-color: white;
+  z-index: 1002;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  border-radius: 20px;
+}
+.user-page-input,
+.user-page-update-form-yes > button,
+.user-page-update-form-no > button {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.user-page-input {
+  resize: none;
+  font-size: 2rem;
+  border: 1px solid rgb(80, 134, 0);
+  border-radius: 10px;
+}
+
+.user-page-update-form-choices {
+  display: flex;
+  gap: 1rem;
+}
+
+.user-page-update-form-yes > button,
+.user-page-update-form-no > button {
+  height: 60px;
+  width: 180px;
+  border-radius: 20px;
+  border: none;
+  background-color: greenyellow;
+  font-size: 1.6rem;
+}
+
+.user-page-update-form-yes > button:hover,
+.user-page-update-form-no > button:hover {
+  background-color: blue;
+  color: white;
+}
+
+.black-overlay-edit {
+  position: fixed;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  min-height: 100%;
+  background-color: black;
+  z-index: 1001;
+  -moz-opacity: 0.8;
+  opacity: .80;
+  filter: alpha(opacity=80);
+}
+
+.user-page-err-message {
+  min-height: 40px;
+  color: red;
+}

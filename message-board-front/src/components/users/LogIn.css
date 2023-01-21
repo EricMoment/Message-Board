@@ -37,7 +37,6 @@ label {
 }
 
 label > input {
-  height: 40px;
   font-size: 2rem;
   border-radius: 10px;
   border: 1px solid rgb(80, 134, 0);

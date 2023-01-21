@@ -1,0 +1,49 @@
+.user-page {
+  flex: 1;
+  min-height: 100vh;
+  padding: 2rem 4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  gap: 2rem 
+}
+
+.user-page-messages-container {
+  flex: 4;
+  width: 100%;
+  overflow-wrap: break-word;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+}
+
+.user-page-message-stat {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.user-page-edit {
+  display: flex;
+  align-items: center;
+  gap: 1rem
+}
+
+.user-page-edit > button {
+  border: none;
+  background: none;
+  font-size: 1.4rem;
+  color: blue;
+}
+
+.user-page-edit > button:hover {
+  color: red;
+}
+
+.user-page-message-date {
+  color: grey;
+  font-size: 1.5rem;
+}

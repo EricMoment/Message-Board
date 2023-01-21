@@ -1,12 +1,14 @@
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from 'react'
 import './App.css';
-import Header from "./components/Header";
+import Header from "./components/headfooter/Header";
 import SignUp from './components/users/SignUp.js'
 import LogIn from './components/users/LogIn.js'
 import MainPage from './components/MainPage'
-import Footer from "./components/Footer";
+import UserPage from "./components/users/UserPage";
+import Footer from "./components/headfooter/Footer";
 import cookies from 'js-cookie'
+import ErrorPage from './components/headfooter/ErrorPage'
 //reactJS
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
           <Route path="/user/sign-up" element={<SignUp currentUser={user}/>} />
           <Route path="/user/log-in" element={<LogIn currentUser={user} setCurrentUser={setUser}/>} />
           <Route path="/user/log-out" element={<LogOut currentUser={user} setCurrentUser={setUser}/>} />
+          <Route path="/user/:username" element={<UserPage currentUser={user}/>} />
+          <Route path='*' element={<ErrorPage />} />
         </Routes>
       <Footer />
     </BrowserRouter>
@@ -41,7 +45,7 @@ function LogOut({currentUser, setCurrentUser}) {
           return navigate('/');
         }
         await response.json(response).then(json => console.log(json))
-        setCurrentUser({username: 'Guest', userMessages: []})
+        setCurrentUser({userid: undefined, username: 'Guest', userMessages: undefined})
         cookies.remove('username')
         cookies.remove('userMessages')
         cookies.remove('userid')
@@ -49,6 +53,7 @@ function LogOut({currentUser, setCurrentUser}) {
       })
     }
     c()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 }
 

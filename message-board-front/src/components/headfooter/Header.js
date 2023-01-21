@@ -7,7 +7,7 @@ export default function Header({currentUser}) {
     if (currentUser.username !== 'Guest') {
       return (
         <div className='header-logs'>
-          <div className='header-name'>{currentUser.username}</div>
+          <Link className='header-name' to={'/user/' + currentUser.username}>{currentUser.username}</Link>
           <Link className='header-links' to='/user/log-out'>Log-out</Link>
         </div>
       )

@@ -15,7 +15,8 @@ export default function SignUp({currentUser}) {
   const navigate = useNavigate();
   useEffect(() => {
     if (currentUser.username !== 'Guest') return navigate('/')
-    console.log('Signing Up!')
+    document.title = 'Sign Up | Message Board'
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   async function handleSubmit(e) { //post
@@ -30,11 +31,10 @@ export default function SignUp({currentUser}) {
         "Content-type": "application/json; charset=UTF-8"
       },
       credentials: 'include',
-    }).then( async response => {
+    }).then(async response => {
       if (!response.ok) {
         setData({...data, password: '', confirmPassword: ''})
         await response.json(response).then(json =>{
-          //console.log(json.error)
           for (let i = 0; i < json.error.length; i++) {
             if (!json.error[i].param) {
               setErrMessageUsername(json.error)
@@ -46,17 +46,14 @@ export default function SignUp({currentUser}) {
               setErrMessageConfirm(json.error[i].msg)
             }
           }
-
+          return navigate('/user/sign-up')
         })
-        navigate('/user/sign-up')
-        return
+      } else {
+        await response.json(response).then(json => {
+          console.log(json)
+          navigate('/user/log-in')
+        })
       }
-      setData({username: '', password: '', confirmPassword: ''})
-      setErrMessageUsername(' ')
-      setErrMessagePassword(' ')
-      setErrMessageConfirm(' ')
-      navigate('/user/log-in')
-      await response.json(response).then(json => console.log(json))
     })
   }
 

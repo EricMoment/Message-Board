@@ -3,6 +3,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 1.5rem;
   background-color: rgb(52, 45, 45);  
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
@@ -21,5 +22,5 @@
 
 .header-links,
 .header-name {
-  margin: 0 12px;
+  margin: 0 18px;
 }

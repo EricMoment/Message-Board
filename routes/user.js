@@ -22,14 +22,13 @@ router.post("/sign-up", [
           username: req.body.username,
           password: hashedPassword,
         }).save(
-          res.status(200).json({ message: 'User is successfully saved :3' })
+          res.status(200).json('User is successfully saved.')
         );
       });
-      
     });
   }
 ]);
-
+//post sign-up and post log-in are done.
 router.post("/log-in",
   passport.authenticate('local'), 
   function(req, res) {
@@ -44,4 +43,10 @@ router.get("/log-out", (req, res, next) => {
   });
 });
 
+router.get("/:username", async (req, res) => {
+  const user = await User.findOne({username: req.params.username})
+  .populate('user_messages').select({username: 1, user_messages: 1})
+  if (!user) return res.status(400).json(req.params.username + ' is not registered.')
+  res.status(200).json(user);
+})
 module.exports = router;
