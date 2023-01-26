@@ -8,7 +8,7 @@ const { body, validationResult } = require("express-validator");
 /* GET home page. */
 //.sort([['timestamp', 'ascending']])
 router.get('/', async function(req, res) {
-  const messages = await Message.find().sort({ timestamp: -1 }).limit(50).populate('message_user')
+  const messages = await Message.find().sort({ timestamp: -1 }).limit(50).populate('message_user', {username: 1, _id: 1})
   const guestMessages = await MessageGuest.find().sort({ timestamp: -1 }).limit(50) // -1 is tested
   res.status(200).json([...messages, ...guestMessages]);
 });
