@@ -5,7 +5,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 
-const session = require('cookie-session');
+const session = require("express-session");
 const passport = require("./passport.js");
 
 const mongoose = require("mongoose");
