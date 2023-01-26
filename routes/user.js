@@ -45,7 +45,13 @@ router.get("/log-out", (req, res, next) => {
 
 router.get("/:username", async (req, res) => {
   const user = await User.findOne({username: req.params.username})
-  .populate('user_messages').select({username: 1, user_messages: 1})
+  .populate({
+    path: 'user_messages',
+    options: {
+      limit: 50,
+      sort: { timestamp: -1 }
+    }
+  }).select({username: 1, user_messages: 1})
   if (!user) return res.status(400).json(req.params.username + ' is not registered.')
   res.status(200).json(user);
 })

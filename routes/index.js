@@ -8,8 +8,8 @@ const { body, validationResult } = require("express-validator");
 /* GET home page. */
 //.sort([['timestamp', 'ascending']])
 router.get('/', async function(req, res) {
-  const messages = await Message.find().populate('message_user')
-  const guestMessages = await MessageGuest.find()
+  const messages = await Message.find().sort({ timestamp: -1 }).limit(50).populate('message_user')
+  const guestMessages = await MessageGuest.find().sort({ timestamp: -1 }).limit(50) // -1 is tested
   res.status(200).json([...messages, ...guestMessages]);
 });
 
@@ -49,10 +49,9 @@ router.put('/update-message', [
   (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty) return res.status(400).json(errors)
-    Message.findOneAndUpdate({ _id: req.body.message_id },{
-      timestamp: Date.now(),
-      content: req.body.content
-    }, {safe: true}, (err) => {
+    Message.findOneAndUpdate({ _id: req.body.message_id },
+      { content: req.body.content }, { safe: true }, 
+      (err) => {
       if (err) return res.status(400).json("Error updating message.")
       return res.status(200).json("Content Updated.")
     })
