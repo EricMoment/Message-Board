@@ -15,7 +15,7 @@ const app = express();
 const cors = require('cors');
 app.use(helmet());
 
-const mongoDb = process.env.MONGODB_URI || dev_db_url;
+const mongoDb = process.env.MONGODB_URI;
 mongoose.set('strictQuery', true)
 mongoose.connect(mongoDb, { useUnifiedTopology: true, useNewUrlParser: true });
 const db = mongoose.connection;
